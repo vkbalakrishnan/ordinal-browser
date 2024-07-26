@@ -1,1 +1,2 @@
-web - React with Tailwind sample app
+## Contents
+**web** - React app with Tailwind. 
