@@ -59,6 +59,14 @@ const NFTDetail = ({ address, inscription, setInscription }) => {
               {rawContent}
             </div>
           )}
+          <a
+            className="underline float-end"
+            href={`https://ord.xverse.app/content/${inscriptionId}`}
+            target="_blank"
+          >
+            {" "}
+            View in a new tab{" "}
+          </a>
         </div>
         <ul className="nft-content mt-2">
           <li className="mb-2">
