@@ -8,17 +8,19 @@ const getContent = async (inscriptionId) => {
     `https://ord.xverse.app/content/${inscriptionId}`
   );
   const data = await response.text();
-  console.log(data);
   return data;
 };
 const NFTDetail = ({ address, inscription, setInscription }) => {
   const inscriptionId = inscription.id;
   const [content, setContent] = useState({});
+  const [rawContent, setRawContent] = useState({});
   useEffect(() => {
-    // declare the data fetching function
     const fetchData = async () => {
       const response = await fetch(getInscriptionAPI(address, inscriptionId));
       setContent(await response.json());
+
+      const inscriptionContent = await getContent(inscriptionId);
+      setRawContent(inscriptionContent);
     };
 
     fetchData().catch(console.error);
@@ -27,7 +29,8 @@ const NFTDetail = ({ address, inscription, setInscription }) => {
   const resetInscription = () => {
     setInscription(null);
   };
-  if (!content.content_type) return;
+
+  if (!content.content_type || typeof rawContent !== "string") return;
   return (
     <div className="my-8">
       <div className="text-center  mb-8">
@@ -42,21 +45,19 @@ const NFTDetail = ({ address, inscription, setInscription }) => {
         </h1>
       </div>
       <div>
-        {content.content_type.startsWith("image") && (
-          <img
-            className="w-full"
-            src={`https://ord.xverse.app/content/${inscriptionId}`}
-            alt={`content for inscription`}
-          />
-        )}
-        {content.content_type.startsWith("text/html") && (
-          <a href={`https://ord.xverse.app/content/${inscriptionId}`}>
-            {inscription.id}
-          </a>
-        )}
-        {content.content_type.startsWith("text") && (
-          <code>{getContent(inscription.id)}</code>
-        )}
+        <div>
+          {content.content_type.startsWith("image") && (
+            <img
+              className="w-full"
+              src={`https://ord.xverse.app/content/${inscriptionId}`}
+              alt={`content for inscription`}
+            />
+          )}
+
+          <div className="p-8 mb-4 bg-gray-800 text-teal-600 font-light">
+            {rawContent}
+          </div>
+        </div>
         <ul className="nft-content">
           <li className="mb-2">
             <label>Inscription ID</label>

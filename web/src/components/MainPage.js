@@ -20,7 +20,6 @@ const MainPage = ({ onSelect, showOn, address, setAddress }) => {
   };
 
   const onLoadMore = () => {
-    console.log("oooooooo");
     const fetchData = async () => {
       const data = await getInscriptions(address, pageSize, results.length);
       setResults(results.concat(data.results));
