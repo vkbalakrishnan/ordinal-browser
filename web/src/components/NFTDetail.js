@@ -54,11 +54,13 @@ const NFTDetail = ({ address, inscription, setInscription }) => {
             />
           )}
 
-          <div className="p-8 mb-4 bg-gray-800 text-teal-600 font-light">
-            {rawContent}
-          </div>
+          {!content.content_type.startsWith("image") && (
+            <div className="p-8 mb-4 bg-gray-800 text-teal-600 font-light">
+              {rawContent}
+            </div>
+          )}
         </div>
-        <ul className="nft-content">
+        <ul className="nft-content mt-2">
           <li className="mb-2">
             <label>Inscription ID</label>
             <p className="text-wrap break-all	">{inscriptionId}</p>
