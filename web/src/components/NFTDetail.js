@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import RenderContent from "./RenderContent";
 const getInscriptionAPI = (address, inscriptionId) =>
   `https://api-3.xverse.app/v1/address/${address}/ordinals/inscriptions/${inscriptionId}`;
 
@@ -7,13 +7,14 @@ const getContent = async (inscriptionId) => {
   const response = await fetch(
     `https://ord.xverse.app/content/${inscriptionId}`
   );
+  console.log(response.headers);
   const data = await response.text();
   return data;
 };
 const NFTDetail = ({ address, inscription, setInscription }) => {
   const inscriptionId = inscription.id;
   const [content, setContent] = useState({});
-  const [rawContent, setRawContent] = useState({});
+  const [rawContent, setRawContent] = useState();
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(getInscriptionAPI(address, inscriptionId));
@@ -30,7 +31,6 @@ const NFTDetail = ({ address, inscription, setInscription }) => {
     setInscription(null);
   };
 
-  if (!content.content_type || typeof rawContent !== "string") return;
   return (
     <div className="my-8">
       <div className="text-center  mb-8">
@@ -46,19 +46,17 @@ const NFTDetail = ({ address, inscription, setInscription }) => {
       </div>
       <div>
         <div>
-          {content.content_type.startsWith("image") && (
-            <img
-              className="w-full"
-              src={`https://ord.xverse.app/content/${inscriptionId}`}
-              alt={`content for inscription`}
-            />
+          {rawContent && (
+            <RenderContent inscription={content} rawContent={rawContent} />
           )}
-
-          {!content.content_type.startsWith("image") && (
-            <div className="p-8 mb-4 bg-gray-800 text-teal-600 font-light">
-              {rawContent}
-            </div>
-          )}
+          <a
+            className="underline float-end"
+            href={`https://ord.xverse.app/content/${inscriptionId}`}
+            target="_blank"
+          >
+            {" "}
+            View in a new tab{" "}
+          </a>
         </div>
         <ul className="nft-content mt-2">
           <li className="mb-2">
